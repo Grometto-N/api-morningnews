@@ -22,7 +22,7 @@ class CallApiExterneService
         try {
             $response = $this->client->request(
                 'GET',
-
+                'https://api.openweathermap.org/data/2.5/weather?q='.$city.'&appid=ce7418650c86eae6629dfcfdda141c14&units=metric'
             );
             $datas = $response->toArray();
         } catch (\Exception $e) {
