@@ -16,7 +16,7 @@ class CallApiExterneService
         $this->client = $client;
     }
 
-    public function getData(string $city):JsonResponse
+    public function getData():array
     {   
         $apiKey = $_ENV['API_KEY'];
         try {
@@ -27,7 +27,7 @@ class CallApiExterneService
         } catch (\Exception $e) {
             
         }
-        return new JsonResponse($response->getContent(), $response->getStatusCode(), [], true);
 
+        return $response->toArray();
     }
 }

@@ -9,17 +9,33 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ApiController extends AbstractController
-{
+{   
     #[Route('/api/articles', name: 'app_api_articles')]
     public function index(CallApiExterneService $callApiService): JsonResponse
     {   
-        $dataCity = $callApiService->getData("Villeurbanne");
-        // dd($dataCity);
-        return $dataCity;
+        $dataArticles = $callApiService->getData();
+        // dd($dataArticles["status"]);
+        // dd($dataArticles['articles'][0]);
+        $datasToSend = [];
 
-        // return $this->json([
-        //     'message' => 'Welcome to your new controller!',
-        //     'path' => 'src/Controller/ApiPostController.php',
-        // ]);
+        if($dataArticles["status"] === "ok"){
+            foreach($dataArticles['articles'] as $article){
+                $theArticle=[
+                    "title" => $article["title"],
+                    "author" => $article["author"],
+                    "description" => $article["description"],
+                    "urlToImage" => $article["urlToImage"]
+                    ];
+                $datasToSend[]=$theArticle;    
+            }
+
+            return new JsonResponse(["result" => true,
+                                    "articles" =>  $datasToSend
+                                ]);
+        }                       
+
+        return new JsonResponse(["result" => false,
+                                "articles" =>  $datasToSend
+                                ]);
     }
 }
