@@ -12,34 +12,27 @@ use Doctrine\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\HttpFoundation\Response;
+use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 
 class RegistrationController extends AbstractController
 {
-    #[Route('/registration', name: 'app_registration',methods: ['POST'])]
-    public function index(Request $request, SerializerInterface $serializer, EntityManagerInterface  $manager, UserPasswordHasherInterface $userPasswordHasher): JsonResponse
+    #[Route('/register', name: 'app_registration',methods: ['POST'])]
+    public function index(Request $request, SerializerInterface $serializer, EntityManagerInterface  $manager, UserPasswordHasherInterface $userPasswordHasher, JWTTokenManagerInterface $JWTManager): JsonResponse
     {
-        $user = $serializer->deserialize($request->getContent(), 'json');
-        dd($user);
-        // $user = $serializer->deserialize($request->getContent(), User::class, 'json');
-        // dd($user->getPassword());
-        // $user = new User();
-        // $user->setUsername("Nicolas");
-        // $user->setRoles(["ROLE_USER"]);
-        // $user->setPassword($userPasswordHasher->hashPassword($user,"abcdef"));
+        // récuperation des données envoyés
+        $data = $serializer->deserialize($request->getContent(),User::class, 'json');
+        // création d'un nouvel utilisateur en BDD avec ces infos
+        $user = new User();
+        $user->setUsername($data->getUsername());
+        $user->setRoles(["ROLE_USER"]);
+        $user->setPassword($userPasswordHasher->hashPassword($user,$data->getPassword()));
         $manager->persist($user);
 
         $manager->flush();
 
-        $jsonUser = $serializer->serialize($user, 'json', ['groups' => 'getBooks']);
-        
-        // $location = $urlGenerator->generate('detailBook', ['id' => $book->getId()], UrlGeneratorInterface::ABSOLUTE_URL);
+        // envoi des données
 
-        // return new JsonResponse($jsonBook, Response::HTTP_CREATED, ["Location" => $location], true);
-
-        return $this->json([
-            'message' => 'Welcome to your new controller!',
-            'path' => 'src/Controller/RegistrationController.php',
-        ]);
-        // new JsonResponse
+        return new JsonResponse(['result' => true, 'token' => $JWTManager->create($user)]);
     }
 }
