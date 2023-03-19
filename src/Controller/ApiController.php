@@ -8,9 +8,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
-class ApiPostController extends AbstractController
+class ApiController extends AbstractController
 {
-    #[Route('/api/post', name: 'app_api_post')]
+    #[Route('/api/articles', name: 'app_api_articles')]
     public function index(CallApiExterneService $callApiService): JsonResponse
     {   
         $dataCity = $callApiService->getData("Villeurbanne");

@@ -18,18 +18,16 @@ class CallApiExterneService
 
     public function getData(string $city):JsonResponse
     {   
-        $datas = array();
+        $apiKey = $_ENV['API_KEY'];
         try {
             $response = $this->client->request(
                 'GET',
-                'https://api.openweathermap.org/data/2.5/weather?q='.$city.'&appid=ce7418650c86eae6629dfcfdda141c14&units=metric'
+                'https://newsapi.org/v2/top-headlines?sources=the-verge&apiKey='.$apiKey
             );
-            $datas = $response->toArray();
         } catch (\Exception $e) {
             
         }
-       
         return new JsonResponse($response->getContent(), $response->getStatusCode(), [], true);
-        // return $datas;
+
     }
 }
