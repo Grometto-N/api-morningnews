@@ -19,22 +19,23 @@ security:
         #     provider: app_user_provider
 
         login:
-            pattern: ^/api/login
+            pattern: ^/morningnews/login
             stateless: true
             json_login:
-                check_path: /api/login_check
+                check_path: /morningnews/login_check
                 success_handler: lexik_jwt_authentication.handler.authentication_success
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
 
         api:
-            pattern:   ^/api
+            pattern:   ^/morningnews
             stateless: true
             jwt: ~
 
     access_control:
-        - { path: ^/api/login, roles: PUBLIC_ACCESS }
-        - { path: ^/api/register, roles: PUBLIC_ACCESS }
-        - { path: ^/api,       roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/morningnews/login, roles: PUBLIC_ACCESS }
+        - { path: ^/morningnews/register, roles: PUBLIC_ACCESS }
+        - { path: ^/morningnews/articles, roles: PUBLIC_ACCESS }
+        - { path: ^/morningnews,       roles: IS_AUTHENTICATED_FULLY }
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall

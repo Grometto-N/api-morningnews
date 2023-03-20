@@ -10,12 +10,11 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ApiController extends AbstractController
 {   
-    #[Route('/api/articles', name: 'app_api_articles')]
+    #[Route('/morningnews/articles', name: 'app_api_articles',methods: ['GET'])]
     public function index(CallApiExterneService $callApiService): JsonResponse
     {   
         $dataArticles = $callApiService->getData();
-        // dd($dataArticles["status"]);
-        // dd($dataArticles['articles'][0]);
+
         $datasToSend = [];
 
         if($dataArticles["status"] === "ok"){
@@ -37,5 +36,12 @@ class ApiController extends AbstractController
         return new JsonResponse(["result" => false,
                                 "articles" =>  $datasToSend
                                 ]);
+    }
+
+    #[Route('/morningnews/canBookmark', name: 'app_api_canBookmark',methods: ['GET'])]
+    public function canBookmark(): JsonResponse
+    { 
+        // on considère que tous les utilisateurs inscrits peuvent avoir des favoris 
+        return new JsonResponse(["result" => true]);
     }
 }

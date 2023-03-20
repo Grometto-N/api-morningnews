@@ -15,7 +15,7 @@ use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 
 class RegistrationController extends AbstractController
 {
-    #[Route('/register', name: 'app_registration',methods: ['POST'])]
+    #[Route('/morningnews/register', name: 'app_registration',methods: ['POST'])]
     public function index(Request $request, SerializerInterface $serializer, EntityManagerInterface  $manager, UserPasswordHasherInterface $userPasswordHasher, JWTTokenManagerInterface $JWTManager): JsonResponse
     {   
 
