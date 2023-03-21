@@ -22,6 +22,10 @@ class RegistrationController extends AbstractController
         // récuperation des données envoyés
         $data = $serializer->deserialize($request->getContent(),User::class, 'json');
 
+        // vérification qu'il y a bien des données
+        if( $data->getUsername()==="" || $data->getPassword()=== ""){
+            return new JsonResponse(["result" => false, "error" => "Missing or empty fields"]);
+        }
 
         // recherche de l'utilisateur en BDD
        $user=$manager->getRepository(User::class)->findOneBy(

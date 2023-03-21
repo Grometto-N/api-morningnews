@@ -3,13 +3,12 @@
 namespace App\Services;
 
 use Symfony\Contracts\HttpClient\HttpClientInterface;
-use Symfony\Component\HttpFoundation\JsonResponse;
 
 
 
 class CallApiExterneService
 {
-    private $client;
+    private HttpClientInterface $client;
 
     public function __construct(HttpClientInterface $client)
     {
